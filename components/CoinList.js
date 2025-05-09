@@ -43,7 +43,6 @@
    })();
  }, [search]);
 
-// components/CoinList.js
 import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import { fetchTopCoins, searchCreatorsByUsername, fetchCoinsByCreator } from '../lib/zora';
