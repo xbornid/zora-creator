@@ -7,65 +7,79 @@ import { parseEther } from 'ethers';
 
 export default function CoinList({ search }) {
   const { account, signer } = useContext(AuthContext);
-  const [coins, setCoins] = useState([]);
+  const [coins, setCoins]   = useState(null);     // null = loading, [] = loaded tapi kosong
   const [watched, setWatched] = useState({});
 
   useEffect(() => {
-    fetchTopCoins().then(setCoins);
+    (async () => {
+      try {
+        console.log('[CoinList] memanggil fetchTopCoins…');
+        const data = await fetchTopCoins();
+        console.log('[CoinList] data koin:', data);
+        setCoins(data);
+      } catch (err) {
+        console.error('[CoinList] Gagal fetchTopCoins:', err);
+        setCoins([]);  // supaya tidak terus loading
+      }
+    })();
   }, []);
 
-  async function handleWatch(coin) {
-    await fetch('/api/webhook', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'watch', coin, fid: account }),
-    });
-    setWatched(w => ({ ...w, [coin.address]: !w[coin.address] }));
+  // Loading
+  if (coins === null) {
+    return <p className="text-center text-gray-500">Memuat daftar koin…</p>;
   }
 
-  async function handleBuy(coin) {
-    if (!signer) return alert('Wallet belum siap');
-    try {
-      const tx = await signer.sendTransaction({
-        to: coin.address,
-        value: parseEther('0.1'),
-      });
-      await tx.wait();
-      alert(`Pembelian berhasil! TX ${tx.hash}`);
-    } catch (err) {
-      console.error(err);
-      alert('Gagal membeli: ' + err.message);
-    }
-  }
-
-  async function handleSell(coin) {
-    if (!signer) return alert('Wallet belum siap');
-    try {
-      const tx = await signer.sendTransaction({
-        to: coin.owner,
-        data: '0x',
-      });
-      await tx.wait();
-      alert(`Penjualan berhasil! TX ${tx.hash}`);
-    } catch (err) {
-      console.error(err);
-      alert('Gagal jual: ' + err.message);
-    }
-  }
-
+  // Tidak ada hasil
   const filtered = coins.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase())
   );
+  if (filtered.length === 0) {
+    return <p className="text-center text-gray-500">Tidak ada koin ditemukan.</p>;
+  }
 
+  // Render list
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {filtered.map(coin => (
         <TokenCard
           key={coin.address}
           coin={coin}
-          onBuy={handleBuy}
-          onSell={handleSell}
-          onWatch={handleWatch}
+          onBuy={async () => {
+            if (!signer) return alert('Wallet belum siap');
+            try {
+              const tx = await signer.sendTransaction({
+                to: coin.address,
+                value: parseEther('0.1'),
+              });
+              await tx.wait();
+              alert(`Pembelian berhasil! TX ${tx.hash}`);
+            } catch (e) {
+              console.error(e);
+              alert('Gagal membeli: ' + e.message);
+            }
+          }}
+          onSell={async () => {
+            if (!signer) return alert('Wallet belum siap');
+            try {
+              const tx = await signer.sendTransaction({
+                to: coin.owner,
+                data: '0x',
+              });
+              await tx.wait();
+              alert(`Penjualan berhasil! TX ${tx.hash}`);
+            } catch (e) {
+              console.error(e);
+              alert('Gagal jual: ' + e.message);
+            }
+          }}
+          onWatch={async () => {
+            await fetch('/api/webhook', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'watch', coin, fid: account }),
+            });
+            setWatched(w => ({ ...w, [coin.address]: !w[coin.address] }));
+          }}
           watched={!!watched[coin.address]}
         />
       ))}
