@@ -12,6 +12,7 @@ class MyDocument extends Document {
     const frameEmbed = {
       version: 'next',                              // sesuai spec v2
       imageUrl: 'https://zora-creator-sigma.vercel.app/og-image.png',  // 3:2 ratio
+      aspectRatio: '3:2',                           // proporsi lebar:tinggi
       button: {
         title: 'Open Zora Creator',                 // max 32 char
         action: {
@@ -30,7 +31,6 @@ class MyDocument extends Document {
           {/* Meta tag untuk embed Frame v2 */}
           <meta
             name="fc:frame"
-            // isi harus stringified JSON tanpa spasi baris baru
             content={JSON.stringify(frameEmbed)}
           />
         </Head>
