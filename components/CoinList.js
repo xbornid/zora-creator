@@ -7,7 +7,7 @@ import { parseEther } from 'ethers';
 
 export default function CoinList({ search }) {
   const { account, signer } = useContext(AuthContext);
-  const [coins, setCoins]   = useState(null);     // null = loading, [] = loaded tapi kosong
+  const [coins, setCoins] = useState(null);    // null = loading, [] = loaded tapi kosong
   const [watched, setWatched] = useState({});
 
   useEffect(() => {
@@ -19,17 +19,17 @@ export default function CoinList({ search }) {
         setCoins(data);
       } catch (err) {
         console.error('[CoinList] Gagal fetchTopCoins:', err);
-        setCoins([]);  // supaya tidak terus loading
+        setCoins([]); // supaya tidak terus loading
       }
     })();
   }, []);
 
-  // Loading
+  // Loading state
   if (coins === null) {
     return <p className="text-center text-gray-500">Memuat daftar koin…</p>;
   }
 
-  // Tidak ada hasil
+  // Filter berdasarkan pencarian
   const filtered = coins.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -37,7 +37,7 @@ export default function CoinList({ search }) {
     return <p className="text-center text-gray-500">Tidak ada koin ditemukan.</p>;
   }
 
-  // Render list
+  // Render daftar TokenCard
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {filtered.map(coin => (
@@ -55,7 +55,7 @@ export default function CoinList({ search }) {
               alert(`Pembelian berhasil! TX ${tx.hash}`);
             } catch (e) {
               console.error(e);
-              alert('Gagal membeli: ' + e.message);
+              alert(`Gagal membeli: ${e.message}`);
             }
           }}
           onSell={async () => {
@@ -69,16 +69,23 @@ export default function CoinList({ search }) {
               alert(`Penjualan berhasil! TX ${tx.hash}`);
             } catch (e) {
               console.error(e);
-              alert('Gagal jual: ' + e.message);
+              alert(`Gagal jual: ${e.message}`);
             }
           }}
           onWatch={async () => {
-            await fetch('/api/webhook', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ action: 'watch', coin, fid: account }),
-            });
-            setWatched(w => ({ ...w, [coin.address]: !w[coin.address] }));
+            try {
+              const res = await fetch('/api/webhook', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'watch', coin, fid: account }),
+              });
+              if (!res.ok) throw new Error(await res.text());
+              setWatched(w => ({ ...w, [coin.address]: !w[coin.address] }));
+              alert(`${watched[coin.address] ? 'Berhenti' : 'Mulai'} memantau ${coin.name}`);
+            } catch (e) {
+              console.error(e);
+              alert(`Gagal mengubah watch: ${e.message}`);
+            }
           }}
           watched={!!watched[coin.address]}
         />
