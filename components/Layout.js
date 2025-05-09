@@ -9,7 +9,7 @@ export default function Layout({ children }) {
         <h1 className="text-xl font-bold">
           <Link href="/"><a>Zora Creator</a></Link>
         </h1>
-        <nav className="space-x-8">
+        <nav className="space-x-10">
           <Link href="/"><a className="text-gray-700 hover:text-gray-900">Home</a></Link>
           <Link href="/profile"><a className="text-gray-700 hover:text-gray-900">Profil</a></Link>
         </nav>
