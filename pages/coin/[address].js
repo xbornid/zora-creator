@@ -6,14 +6,14 @@ import { parseEther } from 'ethers';
 import { useWarplet } from '../../lib/wallet';
 
 export default function CoinDetail({ coin, history }) {
-  const { account, signer } = useWarplet();
+  const { signer } = useWarplet();
 
   return (
     <Layout>
       <h1 className="text-2xl font-bold mb-2">
         {coin.name} ({coin.symbol})
       </h1>
-      <p>Creator: {coin.creatorAddress}</p>
+      <p>Creator: {coin.creatorAddress || '–'}</p>
       <p>Market Cap: ${Number(coin.marketCap).toLocaleString()}</p>
 
       <section className="mt-6">
@@ -21,7 +21,7 @@ export default function CoinDetail({ coin, history }) {
         <ul className="list-disc pl-5 space-y-1">
           {history.map((h, i) => (
             <li key={i}>
-              {h.type} – {h.amount} –{' '}
+              {h.type} – {h.amount} – TX:{' '}
               <a
                 href={`https://etherscan.io/tx/${h.txHash}`}
                 target="_blank"
