@@ -12,7 +12,7 @@
     "react-dom": "latest",
     "tailwindcss": "latest",
     "@zoralabs/coins-sdk": "latest",
-    "@farcasterxyz/warplet": "latest",
+    "@farcaster/frame-sdk": "latest"
     "@coinbase/onchainkit": "latest",
     "ethers": "latest"
   }
