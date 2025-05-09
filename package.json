@@ -13,6 +13,7 @@
     "tailwindcss": "latest",
     "@zoralabs/coins-sdk": "latest",
     "ethers": "latest",
-    "viem": "latest"
+    "viem": "latest",
+    "@upstash/redis": "latest"
   }
 }
