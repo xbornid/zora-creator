@@ -7,17 +7,11 @@ export default function Layout({ children }) {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white shadow p-4 flex items-center justify-between">
         <h1 className="text-xl font-bold">
-          <Link href="/">
-            <a>Zora Creator</a>
-          </Link>
+          <Link href="/"><a>Zora Creator</a></Link>
         </h1>
-        <nav className="space-x-4">
-          <Link href="/">
-            <a className="text-gray-700 hover:text-gray-900">Home</a>
-          </Link>
-          <Link href="/profile">
-            <a className="text-gray-700 hover:text-gray-900">Profil</a>
-          </Link>
+        <nav className="space-x-6">
+          <Link href="/"><a className="text-gray-700 hover:text-gray-900">Home</a></Link>
+          <Link href="/profile"><a className="text-gray-700 hover:text-gray-900">Profil</a></Link>
         </nav>
       </header>
       <main className="flex-1 p-6">{children}</main>
