@@ -21,9 +21,8 @@ export default function CoinList({ search }) {
       try {
         let data;
         if (search && search.trim()) {
-          // 1) Cari creator by handle
+          // Pencarian: cari creators → fetch tokens → attach handle
           const creators = await searchCreatorsByUsername(search.trim());
-          // 2) Ambil semua token tiap creator, attach creatorHandle
           const lists = await Promise.all(
             creators.map(async (c) => {
               const tokens = await fetchCoinsByCreator(c.address);
@@ -34,16 +33,8 @@ export default function CoinList({ search }) {
         } else {
           // Default: top coins by market cap
           const tops = await fetchTopCoins();
-          // 3) Enrich each top coin with creatorHandle
-          const enriched = await Promise.all(
-            tops.map(async (t) => {
-              // cari username Zora dari address
-              const users = await searchCreatorsByUsername(t.creatorAddress);
-              const u = users.find(u => u.address.toLowerCase() === t.creatorAddress.toLowerCase());
-              return { ...t, creatorHandle: u?.handle || null };
-            })
-          );
-          data = enriched;
+          // attach creatorHandle=null
+          data = tops.map(t => ({ ...t, creatorHandle: null }));
         }
         setCoins(data);
       } catch (err) {
