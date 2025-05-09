@@ -1,3 +1,4 @@
+// context/AuthContext.js
 import React, { createContext } from 'react';
 import { useWarplet } from '../lib/wallet';
 
