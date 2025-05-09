@@ -1,6 +1,6 @@
 // components/CoinList.js
 import React, { useEffect, useState, useContext } from 'react';
-import { useRouter } from 'next/router';
+import Link from 'next/link';
 import {
   fetchTopCoins,
   searchCreatorsByUsername,
@@ -9,8 +9,16 @@ import {
 import TokenCard from './TokenCard';
 import { AuthContext } from '../context/AuthContext';
 
+function normalizeCoin(raw, creatorHandle = null) {
+  // raw bisa berupa Zora20Token atau hasil fetchCoinsByCreator
+  const address = raw.address || raw.token?.address;
+  const name = raw.name || raw.token?.name || '[No Name]';
+  const symbol = raw.symbol || raw.token?.symbol || '';
+  const marketCap = raw.marketCap || raw.token?.marketCap || 0;
+  return { address, name, symbol, marketCap, creatorHandle };
+}
+
 export default function CoinList({ search }) {
-  const router = useRouter();
   const { account } = useContext(AuthContext);
   const [coins, setCoins] = useState(null);
   const [watched, setWatched] = useState({});
@@ -19,24 +27,23 @@ export default function CoinList({ search }) {
     (async () => {
       setCoins(null);
       try {
-        let data;
+        let list = [];
         if (search && search.trim()) {
-          // Pencarian: cari creators → fetch tokens → attach handle
+          // Cari creators
           const creators = await searchCreatorsByUsername(search.trim());
-          const lists = await Promise.all(
-            creators.map(async (c) => {
-              const tokens = await fetchCoinsByCreator(c.address);
-              return tokens.map(t => ({ ...t, creatorHandle: c.handle }));
-            })
-          );
-          data = lists.flat();
+          // Untuk tiap creator, fetch coins, attach handle
+          for (const c of creators) {
+            const tokens = await fetchCoinsByCreator(c.address);
+            list.push(
+              ...tokens.map(t => normalizeCoin(t, c.handle))
+            );
+          }
         } else {
-          // Default: top coins by market cap
+          // Default: top coins
           const tops = await fetchTopCoins();
-          // attach creatorHandle=null
-          data = tops.map(t => ({ ...t, creatorHandle: null }));
+          list = tops.map(t => normalizeCoin(t, null));
         }
-        setCoins(data);
+        setCoins(list);
       } catch (err) {
         console.error('[CoinList] error:', err);
         setCoins([]);
@@ -60,26 +67,24 @@ export default function CoinList({ search }) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {coins.map(coin => (
-        <div
-          key={coin.address}
-          className="cursor-pointer hover:shadow-lg transition-shadow"
-          onClick={() => router.push(`/coin/${coin.address}`)}
-        >
-          <TokenCard
-            coin={coin}
-            onBuy={() => router.push(`/coin/${coin.address}`)}
-            onSell={() => router.push(`/coin/${coin.address}`)}
-            onWatch={async () => {
-              await fetch('/api/webhook', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'watch', coin, fid: account }),
-              });
-              setWatched(w => ({ ...w, [coin.address]: !w[coin.address] }));
-            }}
-            watched={!!watched[coin.address]}
-          />
-        </div>
+        <Link key={coin.address} href={`/coin/${coin.address}`} passHref>
+          <a className="cursor-pointer hover:shadow-lg transition-shadow block">
+            <TokenCard
+              coin={coin}
+              onBuy={() => alert('Klik detail untuk Buy')}
+              onSell={() => alert('Klik detail untuk Sell')}
+              onWatch={async () => {
+                await fetch('/api/webhook', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ action: 'watch', coin, fid: account }),
+                });
+                setWatched(w => ({ ...w, [coin.address]: !w[coin.address] }));
+              }}
+              watched={!!watched[coin.address]}
+            />
+          </a>
+        </Link>
       ))}
     </div>
   );
