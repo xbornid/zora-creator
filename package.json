@@ -13,7 +13,7 @@
     "tailwindcss": "latest",
     "@zoralabs/coins-sdk": "latest",
     "@farcasterxyz/warplet": "latest",
-    "@farcasterxyz/minikit": "latest",
+    "@coinbase/onchainkit": "latest",
     "ethers": "latest"
   }
 }
