@@ -1,8 +1,9 @@
+// components/CoinList.js
 import React, { useEffect, useState, useContext } from 'react';
-import { ethers } from 'ethers';
 import { fetchTopCoins } from '../lib/zora';
 import TokenCard from './TokenCard';
 import { AuthContext } from '../context/AuthContext';
+import { parseEther } from 'ethers';
 
 export default function CoinList({ search }) {
   const { account, signer } = useContext(AuthContext);
@@ -27,11 +28,10 @@ export default function CoinList({ search }) {
     try {
       const tx = await signer.sendTransaction({
         to: coin.address,
-        value: ethers.utils.parseEther('0.1'),
+        value: parseEther('0.1'),
       });
-      console.log('Buy TX:', tx.hash);
       await tx.wait();
-      alert('Pembelian berhasil! TX ' + tx.hash);
+      alert(`Pembelian berhasil! TX ${tx.hash}`);
     } catch (err) {
       console.error(err);
       alert('Gagal membeli: ' + err.message);
@@ -43,11 +43,10 @@ export default function CoinList({ search }) {
     try {
       const tx = await signer.sendTransaction({
         to: coin.owner,
-        data: '0x', 
+        data: '0x',
       });
-      console.log('Sell TX:', tx.hash);
       await tx.wait();
-      alert('Penjualan berhasil! TX ' + tx.hash);
+      alert(`Penjualan berhasil! TX ${tx.hash}`);
     } catch (err) {
       console.error(err);
       alert('Gagal jual: ' + err.message);
