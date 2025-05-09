@@ -11,7 +11,7 @@ import { AuthContext } from '../context/AuthContext';
 
 export default function CoinList({ search }) {
   const router = useRouter();
-  const { account, signer } = useContext(AuthContext);
+  const { account } = useContext(AuthContext);
   const [coins, setCoins] = useState(null);
   const [watched, setWatched] = useState({});
 
@@ -21,21 +21,29 @@ export default function CoinList({ search }) {
       try {
         let data;
         if (search && search.trim()) {
-          // 1) Cari creator
+          // 1) Cari creator by handle
           const creators = await searchCreatorsByUsername(search.trim());
-          // 2) Ambil token tiap creator, tandai creatorHandle
+          // 2) Ambil semua token tiap creator, attach creatorHandle
           const lists = await Promise.all(
-            creators.map(c =>
-              fetchCoinsByCreator(c.address).then(tokens =>
-                tokens.map(t => ({ ...t, creatorHandle: c.handle }))
-              )
-            )
+            creators.map(async (c) => {
+              const tokens = await fetchCoinsByCreator(c.address);
+              return tokens.map(t => ({ ...t, creatorHandle: c.handle }));
+            })
           );
           data = lists.flat();
         } else {
-          // Default: top coins, tanpa creatorHandle
+          // Default: top coins by market cap
           const tops = await fetchTopCoins();
-          data = tops.map(t => ({ ...t, creatorHandle: null }));
+          // 3) Enrich each top coin with creatorHandle
+          const enriched = await Promise.all(
+            tops.map(async (t) => {
+              // cari username Zora dari address
+              const users = await searchCreatorsByUsername(t.creatorAddress);
+              const u = users.find(u => u.address.toLowerCase() === t.creatorAddress.toLowerCase());
+              return { ...t, creatorHandle: u?.handle || null };
+            })
+          );
+          data = enriched;
         }
         setCoins(data);
       } catch (err) {
