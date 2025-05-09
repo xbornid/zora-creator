@@ -1,3 +1,4 @@
+// pages/profile.js
 import React, { useEffect, useState, useContext } from 'react';
 import Layout from '../components/Layout';
 import { AuthContext } from '../context/AuthContext';
@@ -7,7 +8,7 @@ export default function Profile() {
   const [watchedList, setWatchedList] = useState([]);
 
   useEffect(() => {
-    // fetch watched creators from backend
+    // TODO: fetch watched creators dari backend
   }, [account]);
 
   return (
