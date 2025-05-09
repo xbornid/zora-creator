@@ -1,48 +1,4 @@
 // components/CoinList.js
- useEffect(() => {
-   (async () => {
--    setCoins(null);
-+    console.log('––> CoinList mounted, search=', search);
-+    setCoins(null);
-     try {
--      let list = [];
-+      let list = [];
-+      console.log('––> starting fetch, search=', search);
-
-       if (search && search.trim()) {
--        const creators = await searchCreatorsByUsername(search.trim());
-+        const creators = await searchCreatorsByUsername(search.trim());
-+        console.log('––> creators found:', creators);
-
-         for (const c of creators) {
--          const tokens = await fetchCoinsByCreator(c.address);
-+          const tokens = await fetchCoinsByCreator(c.address);
-+          console.log(`––> tokens for ${c.handle}:`, tokens);
-
-           tokens.forEach(t =>
-             list.push({ ...t, creatorHandle: c.handle })
-           );
-         }
-       } else {
--        const tops = await fetchTopCoins();
-+        const tops = await fetchTopCoins();
-+        console.log('––> top coins:', tops);
-
-         tops.forEach(t =>
-           list.push({ ...t, creatorHandle: null })
-         );
-       }
-
--      setCoins(list);
-+      console.log('––> final list:', list);
-+      setCoins(list);
-     } catch (err) {
-       console.error('[CoinList] error:', err);
-       setCoins([]);
-     }
-   })();
- }, [search]);
-
 import React, { useEffect, useState, useContext } from 'react';
 import Link from 'next/link';
 import { fetchTopCoins, searchCreatorsByUsername, fetchCoinsByCreator } from '../lib/zora';
