@@ -29,8 +29,8 @@
     ],
     "heroImageUrl": "https://zora-creator.vercel.app/og-image.png",
     "tagline": "Real-time Zora token alerts",
-    "ogTitle": "Zora Creator – Monitor & Notifikasi Koin Zora",
-    "ogDescription": "Dapatkan notifikasi Warpcast saat kreator Zora kesayanganmu memposting token baru—langsung dan real-time!",
+    "ogTitle": "Zora Creator",
+    "ogDescription": "Monitoring your creators",
     "ogImageUrl": "https://zora-creator.vercel.app/og-image.png"
   }
 }
