@@ -9,7 +9,7 @@ export default function TokenCard({ coin, onBuy, onSell, onWatch, watched }) {
   return (
     <div className="border rounded-lg p-4 shadow-sm bg-white">
       <h2 className="font-semibold text-lg">
-        {coin.name} {coin.symbol && `(${coin.symbol})`}
+        {coin.name || '[No Name]'} {coin.symbol && `(${coin.symbol})`}
       </h2>
       <p className="text-sm text-gray-600">
         Creator: {coin.creatorHandle || '–'}
