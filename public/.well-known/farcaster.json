@@ -1,0 +1,36 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjkxNTIsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMmVmNzkwRGQ3OTkzQTM1ZkQ4NDdDMDUzRURkQUU5NDBEMDU1NTk2In0",
+    "payload": "eyJkb21haW4iOiJyZXJhLmNyZWF0b3Iuem9yYS1jcmVhdG9yLnZlcmNlbC5hcHAifQ",
+    "signature": "MHgxMGQwZGU4ZGYwZDUwZTdmMGIxN2YxMTU2NDI1MjRmZTY0MTUyZGU4ZGU1MWU0MThiYjU4ZjVmZmQxYjRjNDBiNGVlZTRhNDcwNmVmNjhlMzQ0ZGQ5MDBkYmQyMmNlMmVlZGY5ZGQ0N2JlNWRmNzMwYzUxNjE4OWVjZDJjY2Y0MDFj"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Zora Creator",
+    "iconUrl": "https://zora-creator.vercel.app/icon-128.png",
+    "splashImageUrl": "https://zora-creator.vercel.app/splash.png",
+    "splashBackgroundColor": "#ffffff",
+    "homeUrl": "https://zora-creator.vercel.app",
+    "webhookUrl": "https://zora-creator.vercel.app/api/webhook",
+    "subtitle": "Monitor posting koin Zora",
+    "description": "Pantau kreator Zora favoritmu dan dapatkan notifikasi langsung di Warpcast setiap ada koin baru.",
+    "screenshotUrls": [
+      "https://zora-creator.vercel.app/screenshot-1.png",
+      "https://zora-creator.vercel.app/screenshot-2.png",
+      "https://zora-creator.vercel.app/screenshot-3.png"
+    ],
+    "primaryCategory": "finance",
+    "tags": [
+      "zora",
+      "tokens",
+      "monitoring",
+      "warpcast",
+      "farcaster"
+    ],
+    "heroImageUrl": "https://zora-creator.vercel.app/og-image.png",
+    "tagline": "Real-time Zora token alerts",
+    "ogTitle": "Zora Creator – Monitor & Notifikasi Koin Zora",
+    "ogDescription": "Dapatkan notifikasi Warpcast saat kreator Zora kesayanganmu memposting token baru—langsung dan real-time!",
+    "ogImageUrl": "https://zora-creator.vercel.app/og-image.png"
+  }
+}
