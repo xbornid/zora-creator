@@ -12,7 +12,7 @@ export default function TokenCard({ coin, onBuy, onSell, onWatch, watched }) {
         {coin.name} {coin.symbol && `(${coin.symbol})`}
       </h2>
       <p className="text-sm text-gray-600">
-        Creator: {coin.creatorHandle || coin.creatorAddress || '–'}
+        Creator: {coin.creatorHandle || '–'}
       </p>
       <p className="mt-1">Market Cap: ${marketCapValue}</p>
       <div className="mt-3 flex space-x-2">
