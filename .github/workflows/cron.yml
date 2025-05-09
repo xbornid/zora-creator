@@ -1,0 +1,20 @@
+name: Zora Creator Cron
+
+# Jalankan sesuai jadwal, misal tiap 30 menit
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch:   # memungkinkan dijalankan manual
+
+jobs:
+  trigger-cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger cron-check endpoint
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://zora-creator-sigma.vercel.app/api/cron-check)
+          echo "API responded with status $STATUS"
+          if [ "$STATUS" -ne 200 ]; then
+            echo "⚠️ Cron endpoint gagal (HTTP $STATUS)" >&2
+            exit 1
+          fi
