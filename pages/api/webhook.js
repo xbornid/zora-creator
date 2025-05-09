@@ -1,30 +1,24 @@
 // pages/api/webhook.js
 import { sendNotification } from '../../lib/farcaster';
+import { Buffer } from 'buffer';
 
-const subscriptions = [];
-// Bentuk item: { fid, notificationUrl, token, contracts: [] }
+const subscriptions = []; 
+// setiap item: { fid, notificationUrl, token, contracts: [] }
 
 export default async function handler(req, res) {
   const evt = req.body;
 
-  // 1) Host menambahkan frame → dapatkan notificationUrl & token
+  // 1) Tangani event frame_added (simpan URL + token)
   if (evt.event === 'frame_added' && evt.notificationDetails) {
     const { url, token } = evt.notificationDetails;
-    // Decode fid dari JWS payload:
-    const [, payloadBase64] = evt.payload.split('.');
-    const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64').toString());
+    const [, payload] = evt.payload.split('.');
+    const decoded = JSON.parse(Buffer.from(payload, 'base64').toString());
     const fid = decoded.fid;
-
-    subscriptions.push({
-      fid,
-      notificationUrl: url,
-      token,
-      contracts: [],
-    });
+    subscriptions.push({ fid, notificationUrl: url, token, contracts: [] });
     return res.status(200).json({ ok: true });
   }
 
-  // 2) User klik Watch → simpan contract Zora
+  // 2) Aksi Watch dari client
   if (req.method === 'POST' && evt.action === 'watch') {
     const sub = subscriptions.find(s => s.fid === evt.fid);
     if (sub && !sub.contracts.includes(evt.coin.address)) {
@@ -33,25 +27,23 @@ export default async function handler(req, res) {
     return res.status(200).json({ ok: true });
   }
 
-  // 3) Event dari Zora (payload custom) → kirim notifikasi
+  // 3) Event Zora (custom payload dengan contractAddress)
   if (req.method === 'POST' && evt.contractAddress) {
-    const targets = subscriptions.filter(s => s.contracts.includes(evt.contractAddress));
-    await Promise.all(
-      targets.map(sub =>
-        sendNotification(
-          sub.notificationUrl,
-          sub.token,
-          `${sub.fid}-${Date.now()}`,                 // notificationId unik
-          `Koin Baru dari ${evt.creator}!`,           // judul
-          `${evt.coinName} (${evt.marketcap.toLocaleString()})`, // body
-          `${process.env.NEXT_PUBLIC_BASE_URL}/?coin=${encodeURIComponent(evt.contractAddress)}` // targetUrl
-        )
-      )
-    );
-    return res.status(200).json({ ok: true, notified: targets.length });
+    let notified = 0;
+    for (const sub of subscriptions.filter(s => s.contracts.includes(evt.contractAddress))) {
+      await sendNotification(
+        sub.notificationUrl,
+        sub.token,
+        `${sub.fid}-${Date.now()}`,
+        `Koin Baru dari ${evt.creator}!`,
+        `${evt.coinName} (Marketcap: ${evt.marketcap})`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/?coin=${encodeURIComponent(evt.contractAddress)}`
+      );
+      notified++;
+    }
+    return res.status(200).json({ ok: true, notified });
   }
 
-  // 4) selain itu → Method not allowed
   res.setHeader('Allow', ['POST']);
   res.status(405).end(`Method ${req.method} not allowed`);
 }
