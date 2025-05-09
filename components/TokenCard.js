@@ -1,3 +1,4 @@
+// components/TokenCard.js
 import React from 'react';
 
 export default function TokenCard({ coin, onBuy, onSell, onWatch, watched }) {
