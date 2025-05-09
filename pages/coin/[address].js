@@ -10,18 +10,18 @@ export default function CoinDetail({ coin, history }) {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-bold mb-4">
+      <h1 className="text-2xl font-bold mb-2">
         {coin.name} ({coin.symbol})
       </h1>
-      <p>Creator: {coin.creator?.handle || coin.creator?.address}</p>
+      <p>Creator: {coin.creatorAddress}</p>
       <p>Market Cap: ${Number(coin.marketCap).toLocaleString()}</p>
 
-      <div className="mt-6">
+      <section className="mt-6">
         <h2 className="text-xl font-semibold mb-2">Riwayat Transaksi</h2>
         <ul className="list-disc pl-5 space-y-1">
           {history.map((h, i) => (
             <li key={i}>
-              {h.type} – {h.amount} – TX:{' '}
+              {h.type} – {h.amount} –{' '}
               <a
                 href={`https://etherscan.io/tx/${h.txHash}`}
                 target="_blank"
@@ -33,7 +33,7 @@ export default function CoinDetail({ coin, history }) {
             </li>
           ))}
         </ul>
-      </div>
+      </section>
 
       <div className="mt-6 flex space-x-3">
         <button
@@ -41,7 +41,7 @@ export default function CoinDetail({ coin, history }) {
             if (!signer) return alert('Wallet belum siap');
             const tx = await signer.sendTransaction({
               to: coin.address,
-              value: parseEther('0.1')
+              value: parseEther('0.1'),
             });
             await tx.wait();
             alert(`Pembelian berhasil! TX ${tx.hash}`);
@@ -50,13 +50,12 @@ export default function CoinDetail({ coin, history }) {
         >
           Buy
         </button>
-
         <button
           onClick={async () => {
             if (!signer) return alert('Wallet belum siap');
             const tx = await signer.sendTransaction({
               to: coin.owner,
-              data: '0x'
+              data: '0x',
             });
             await tx.wait();
             alert(`Penjualan berhasil! TX ${tx.hash}`);
