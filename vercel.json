@@ -9,6 +9,6 @@
     { "src": "/(.*)", "dest": "/" }
   ],
   "crons": [
-    { "path": "/api/cron-check", "schedule": "*/5 * * * *" }
+    { "path": "/api/cron-check", "schedule": "*/30 * * * *" }
   ]
 }
