@@ -15,7 +15,6 @@
     "ethers": "latest",
     "viem": "latest",
     "@upstash/redis": "latest",
-    "@farcaster/frame-sdk": "latest",
     "cross-fetch": "latest"
   }
 }
