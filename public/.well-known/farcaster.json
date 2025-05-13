@@ -7,17 +7,17 @@
   "frame": {
     "version": "1",
     "name": "Zora Creator",
-    "iconUrl": "https://zora-creator.vercel.app/icon-128.png",
-    "splashImageUrl": "https://zora-creator.vercel.app/splash.png",
+    "iconUrl": "https://zora-creator-iota.vercel.app/icon-128.png",
+    "splashImageUrl": "https://zora-creator-iota.vercel.app/splash.png",
     "splashBackgroundColor": "#ffffff",
-    "homeUrl": "https://zora-creator.vercel.app",
-    "webhookUrl": "https://zora-creator.vercel.app/api/webhook",
+    "homeUrl": "https://zora-creator-iota.vercel.app",
+    "webhookUrl": "https://zora-creator-iota.vercel.app/api/webhook",
     "subtitle": "Monitor posting koin Zora",
     "description": "Pantau kreator Zora favoritmu dan dapatkan notifikasi langsung di Warpcast setiap ada koin baru.",
     "screenshotUrls": [
-      "https://zora-creator.vercel.app/screenshot-1.png",
-      "https://zora-creator.vercel.app/screenshot-2.png",
-      "https://zora-creator.vercel.app/screenshot-3.png"
+      "https://zora-creator-iota.vercel.app/screenshot-1.png",
+      "https://zora-creator-iota.vercel.app/screenshot-2.png",
+      "https://zora-creator-iota.vercel.app/screenshot-3.png"
     ],
     "primaryCategory": "finance",
     "tags": [
@@ -27,10 +27,10 @@
       "warpcast",
       "farcaster"
     ],
-    "heroImageUrl": "https://zora-creator.vercel.app/og-image.png",
+    "heroImageUrl": "https://zora-creator-iota.vercel.app/og-image.png",
     "tagline": "Real-time Zora token alerts",
     "ogTitle": "Zora Creator",
     "ogDescription": "Monitoring your creators",
-    "ogImageUrl": "https://zora-creator.vercel.app/og-image.png"
+    "ogImageUrl": "https://zora-creator-iota.vercel.app/og-image.png"
   }
 }
