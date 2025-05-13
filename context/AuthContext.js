@@ -1,17 +1,34 @@
 // context/AuthContext.js
-import React, { createContext, useContext } from 'react';
-import { useWarplet } from '@farcaster/frame-sdk';
+import React, { createContext, useState, useEffect } from 'react'
+import { ethers } from 'ethers'
 
-export const AuthContext = createContext({ account: null, signer: null });
+export const AuthContext = createContext({ account: null, signer: null })
 
 export default function AuthProvider({ children }) {
-  const { warplet } = useWarplet();
-  const account = warplet?.fid || null;
-  const signer = warplet?.signer || null;
+  const [account, setAccount] = useState(null)
+  const [signer, setSigner]   = useState(null)
+
+  useEffect(() => {
+    if (!window.ethereum) {
+      console.warn('Warplet (window.ethereum) tidak tersedia')
+      return
+    }
+    ;(async () => {
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+        const provider = new ethers.providers.Web3Provider(window.ethereum)
+        const sig = provider.getSigner()
+        setAccount(await sig.getAddress())
+        setSigner(sig)
+      } catch (e) {
+        console.error('Gagal koneksi Warplet', e)
+      }
+    })()
+  }, [])
 
   return (
     <AuthContext.Provider value={{ account, signer }}>
       {children}
     </AuthContext.Provider>
-  );
+  )
 }
