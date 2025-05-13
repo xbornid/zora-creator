@@ -3,8 +3,7 @@
     "header": "eyJmaWQiOjUzNTM4OSwidHlwZSI6ImN1c3RvZHkiLCJrZXkiOiIweDFENTlFOTJlQjM2MmY2NDRBY2VlNjE1RTRiZGRhZjkzMzVDRUM3QTAifQ",
     "payload": "eyJkb21haW4iOiJ6b3JhLWNyZWF0b3ItaW90YS52ZXJjZWwuYXBwIn0",
     "signature": "MHg2YTBiMzkzNWY2MWIwYWRkMzA2OGQ5OGQyNGQxMjE4NGFjMjFiNWQ3Zjg3OGYwM2RmMThjOGM2YWI5ZjgwNzFhNTk1YWVkNzEyYzAwNzQwY2ZlNWY5Zjk2NGIxNTAzYzBhZWY5ZDVlMTgwOWFhY2RmNTU2NzZhMzZjOGZlMjBlNjFj"
-  }
-},
+  },
   "frame": {
     "version": "1",
     "name": "Zora Creator",
