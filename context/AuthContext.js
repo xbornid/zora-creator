@@ -10,7 +10,7 @@ export default function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!window.ethereum) {
-      console.warn('Warplet tidak tersedia')
+      console.warn('window.ethereum tidak tersedia')
       return
     }
     ;(async () => {
