@@ -14,7 +14,7 @@
     "@zoralabs/coins-sdk": "latest",
     "ethers": "latest",
     "viem": "latest",
-    "@minikit/base": "latest", 
+    "@coinbase/onchainkit": "latest",
     "@upstash/redis": "latest",
     "cross-fetch": "latest"
   }
