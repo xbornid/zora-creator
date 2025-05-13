@@ -1,16 +1,13 @@
 // pages/_app.js
-import '../styles/globals.css';
-import { WarpletProvider } from '@farcaster/frame-sdk';
-import AuthProvider from '../context/AuthContext';
+import '../styles/globals.css'
+import AuthProvider from '../context/AuthContext'
 
 function MyApp({ Component, pageProps }) {
   return (
-    <WarpletProvider>
-      <AuthProvider>
-        <Component {...pageProps} />
-      </AuthProvider>
-    </WarpletProvider>
-  );
+    <AuthProvider>
+      <Component {...pageProps} />
+    </AuthProvider>
+  )
 }
 
-export default MyApp;
+export default MyApp
